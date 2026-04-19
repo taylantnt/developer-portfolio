@@ -164,8 +164,10 @@ function updateViewBox() {
   if (!svgEl) return;
   const aspect = window.innerWidth / window.innerHeight;
   const defaultAspect = 1600 / 900;
+  
+  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
 
-  if (aspect < defaultAspect) {
+  if (aspect < defaultAspect && isMobileDevice) {
     isMobileView = true;
     minViewBoxWidth = 900 * aspect;
     
