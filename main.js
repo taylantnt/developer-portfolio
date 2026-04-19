@@ -33,7 +33,7 @@ const projects = {
     title: 'Taylan Topuz',
     url: 'taylantopuz.com',
     link: 'https://www.taylantopuz.com',
-    desc: 'My own photography and videography portfolio — designed and built from scratch. Features a full-screen video masthead served via CDN, an EN / JP language toggle, a custom booking flow, and a handcrafted gallery. Warm, human, and distinctly personal.',
+    desc: 'My own photography and videography portfolio. Designed and built from scratch. Features a full-screen video masthead served via CDN, an EN / JP language toggle, a custom booking flow, and a handcrafted gallery. Warm, human, and distinctly personal.',
     tags: ['Custom Build', 'Bilingual', 'Video CDN', 'Booking Flow'],
     screenshots: [
       'https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/taylantopuz-dev.png',
@@ -47,7 +47,7 @@ const projects = {
     title: 'simseksua.com',
     url: 'simseksua.com',
     link: 'https://simseksua.com',
-    desc: 'A minimalist portfolio for Tokyo-based photographer Simsek Sua Tortu. Full-bleed imagery with a near-invisible UI — the photography speaks for itself. Built for performance with lazy-loading via CDN and butter-smooth transitions.',
+    desc: 'A minimalist portfolio for Tokyo-based photographer Simsek Sua Tortu. Full-bleed imagery with a near-invisible UI. The photography speaks for itself. Built for performance with lazy-loading via CDN and butter-smooth transitions.',
     tags: ['Photography', 'Minimalist', 'Performance', 'Gallery'],
     screenshots: [
       'https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/simseksua-dev.png',
@@ -61,7 +61,7 @@ const projects = {
     title: 'Ertug Sayin',
     url: 'ertugsayin.com',
     link: 'https://ertugsayin.netlify.app',
-    desc: 'Portfolio site for photographer and artist Ertug Sayin. Designed with a bold editorial tone — high-contrast layouts, asymmetric grids, and dramatic typography that mirrors the artist\'s visual identity. Includes an integrated contact and booking system.',
+    desc: 'Portfolio site for photographer and artist Ertug Sayin. Designed with a bold editorial tone. High-contrast layouts, asymmetric grids, and dramatic typography that mirrors the artist\'s visual identity. Includes an integrated contact and booking system.',
     tags: ['Fine Art', 'Editorial', 'Booking', 'Photography'],
     screenshots: [
       'https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/ertugsayin-dev.png',
