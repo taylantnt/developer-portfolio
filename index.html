@@ -15,13 +15,24 @@
 <!-- ══════════════ NAVIGATION BAR ══════════════ -->
 <nav id="main-nav">
   <div class="nav-logo">Developer X</div>
-  <div class="nav-links">
+  
+  <!-- Hamburger Icon -->
+  <div id="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="nav-links" id="nav-links">
       <a href="corporate.html">Corporate Section</a>
       <a href="javascript:openWork()">Work</a>
       <a href="javascript:openAbout()">About</a>
       <a href="javascript:openContact()">Contact</a>
     </div>
 </nav>
+
+<button id="mobile-nav-left" class="mobile-nav-btn" onclick="panView(-1)">&#10094;</button>
+<button id="mobile-nav-right" class="mobile-nav-btn" onclick="panView(1)">&#10095;</button>
 
 <div id="cursor"></div>
 <div id="hint">EXPLORE THE ROOM WITH YOUR MOUSE</div>

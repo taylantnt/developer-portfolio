@@ -333,3 +333,103 @@ html, body {
 #main-nav .nav-links a:hover::after {
   width: 100%;
 }
+
+/* ── Mobile Nav Buttons ── */
+.mobile-nav-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--amber);
+  border: 2px solid var(--amber);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  display: none;
+  z-index: 50;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.3s;
+}
+.mobile-nav-btn:active {
+  background: rgba(232, 168, 112, 0.3);
+}
+#mobile-nav-left { left: 10px; }
+#mobile-nav-right { right: 10px; }
+
+/* ── Hamburger Menu ── */
+#hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 101;
+}
+#hamburger span {
+  display: block;
+  width: 30px;
+  height: 2px;
+  background-color: var(--amber);
+  transition: 0.3s;
+}
+
+/* ── Mobile Responsiveness ── */
+@media (max-width: 768px) {
+  #cursor {
+    display: none !important;
+  }
+  html, body {
+    cursor: auto;
+  }
+  #main-nav {
+    padding: 20px;
+  }
+  #hamburger {
+    display: flex;
+  }
+  #main-nav .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 250px;
+    height: 100vh;
+    background: rgba(20, 15, 10, 0.95);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 80px 30px;
+    transition: right 0.3s ease;
+    z-index: 100;
+    gap: 30px;
+  }
+  #main-nav .nav-links.open {
+    right: 0;
+  }
+  #hamburger.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  #hamburger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  #hamburger.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  
+  /* Make overlay panels responsive */
+  #project-panel, #about-panel, #contact-panel, #work-panel {
+    width: 95%;
+    max-height: 85vh;
+  }
+  #project-content, #about-content, #contact-content, #work-content {
+    padding: 30px 20px;
+  }
+  .typing-phase {
+    padding: 50px 20px;
+  }
+  #proj-thumbnails {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}

@@ -119,9 +119,93 @@ function syncVideoPosition() {
 let coffeeInitialX = 1060;
 let coffeeInitialY = 760;
 
+let currentViewBoxX = null;
+let maxViewBoxX = 0;
+let isMobileView = false;
+let currentViewBoxWidth = 1600;
+
+function updateViewBox() {
+  if (!svgEl) return;
+  const aspect = window.innerWidth / window.innerHeight;
+  const defaultAspect = 1600 / 900;
+
+  if (aspect < defaultAspect) {
+    isMobileView = true;
+    currentViewBoxWidth = 900 * aspect;
+    maxViewBoxX = 1600 - currentViewBoxWidth;
+    
+    if (currentViewBoxX === null) {
+      // Start near the center where the character is
+      currentViewBoxX = (1600 - currentViewBoxWidth) / 2;
+    }
+    
+    currentViewBoxX = Math.max(0, Math.min(currentViewBoxX, maxViewBoxX));
+    
+    gsap.set(svgEl, { attr: { viewBox: `${currentViewBoxX} 0 ${currentViewBoxWidth} 900` } });
+    
+    const leftBtn = document.getElementById('mobile-nav-left');
+    const rightBtn = document.getElementById('mobile-nav-right');
+    if(leftBtn) leftBtn.style.display = currentViewBoxX > 0 ? 'block' : 'none';
+    if(rightBtn) rightBtn.style.display = currentViewBoxX < maxViewBoxX ? 'block' : 'none';
+    
+    const hint = document.getElementById('hint');
+    if(hint) hint.textContent = "PAN TO EXPLORE";
+  } else {
+    isMobileView = false;
+    currentViewBoxWidth = 1600;
+    currentViewBoxX = null;
+    gsap.set(svgEl, { attr: { viewBox: `0 0 1600 900` } });
+    
+    const leftBtn = document.getElementById('mobile-nav-left');
+    const rightBtn = document.getElementById('mobile-nav-right');
+    if(leftBtn) leftBtn.style.display = 'none';
+    if(rightBtn) rightBtn.style.display = 'none';
+    
+    const hint = document.getElementById('hint');
+    if(hint) hint.textContent = "EXPLORE THE ROOM WITH YOUR MOUSE";
+  }
+  
+  syncVideoPosition();
+}
+
+window.panView = function(direction) {
+  if (!isMobileView) return;
+  
+  const panAmount = currentViewBoxWidth * 0.8;
+  let newX = currentViewBoxX + direction * panAmount;
+  
+  newX = Math.max(0, Math.min(newX, maxViewBoxX));
+  
+  gsap.to(svgEl, {
+    attr: { viewBox: `${newX} 0 ${currentViewBoxWidth} 900` },
+    duration: 0.5,
+    ease: "power2.out",
+    onUpdate: syncVideoPosition
+  });
+  
+  currentViewBoxX = newX;
+  
+  const leftBtn = document.getElementById('mobile-nav-left');
+  const rightBtn = document.getElementById('mobile-nav-right');
+  if(leftBtn) leftBtn.style.display = currentViewBoxX > 0 ? 'block' : 'none';
+  if(rightBtn) rightBtn.style.display = currentViewBoxX < maxViewBoxX ? 'block' : 'none';
+};
+
+window.toggleMenu = function() {
+  document.getElementById('nav-links').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+};
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  });
+});
+
 // Initial sync + window resize
 window.addEventListener('load', () => {
-  syncVideoPosition();
+  updateViewBox();
   if (coffeeCup) {
     const transform = coffeeCup.getAttribute('transform');
     if (transform) {
@@ -133,7 +217,7 @@ window.addEventListener('load', () => {
     }
   }
 });
-window.addEventListener('resize', syncVideoPosition);
+window.addEventListener('resize', updateViewBox);
 
 const MAX_EYE_MOVE = 8;
 const MAX_HEAD_MOVE = 15;
@@ -143,8 +227,8 @@ function screenToSVG(sx, sy) {
   const r = svgEl.getBoundingClientRect();
   const vb = svgEl.viewBox.baseVal;
   return {
-    x: (sx - r.left) * (vb.width / r.width),
-    y: (sy - r.top) * (vb.height / r.height)
+    x: vb.x + (sx - r.left) * (vb.width / r.width),
+    y: vb.y + (sy - r.top) * (vb.height / r.height)
   };
 }
 
