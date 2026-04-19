@@ -337,8 +337,6 @@ html, body {
 /* ── Mobile Nav Buttons ── */
 .mobile-nav-btn {
   position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
   background: rgba(0, 0, 0, 0.5);
   color: var(--amber);
   border: 2px solid var(--amber);
@@ -350,13 +348,16 @@ html, body {
   z-index: 50;
   cursor: pointer;
   backdrop-filter: blur(4px);
-  transition: background 0.3s;
+  transition: background 0.3s, opacity 0.3s, transform 0.2s;
 }
 .mobile-nav-btn:active {
   background: rgba(232, 168, 112, 0.3);
+  transform: scale(0.9);
 }
-#mobile-nav-left { left: 10px; }
-#mobile-nav-right { right: 10px; }
+#mobile-nav-left { left: 10px; top: calc(50% - 35px); }
+#mobile-nav-right { right: 10px; top: calc(50% - 35px); }
+#mobile-zoom-out { left: 10px; top: calc(50% + 35px); font-size: 28px; line-height: 46px; }
+#mobile-zoom-in { right: 10px; top: calc(50% + 35px); font-size: 28px; line-height: 46px; }
 
 /* ── Hamburger Menu ── */
 #hamburger {

@@ -123,6 +123,42 @@ let currentViewBoxX = null;
 let maxViewBoxX = 0;
 let isMobileView = false;
 let currentViewBoxWidth = 1600;
+let minViewBoxWidth = 0;
+
+function updateMobileNavButtons() {
+  const leftBtn = document.getElementById('mobile-nav-left');
+  const rightBtn = document.getElementById('mobile-nav-right');
+  const zoomOutBtn = document.getElementById('mobile-zoom-out');
+  const zoomInBtn = document.getElementById('mobile-zoom-in');
+  
+  if (isMobileView) {
+    if(leftBtn) {
+      leftBtn.style.display = 'block';
+      leftBtn.style.opacity = currentViewBoxX > 0 ? '1' : '0';
+      leftBtn.style.pointerEvents = currentViewBoxX > 0 ? 'auto' : 'none';
+    }
+    if(rightBtn) {
+      rightBtn.style.display = 'block';
+      rightBtn.style.opacity = currentViewBoxX < maxViewBoxX ? '1' : '0';
+      rightBtn.style.pointerEvents = currentViewBoxX < maxViewBoxX ? 'auto' : 'none';
+    }
+    if(zoomOutBtn) {
+      zoomOutBtn.style.display = 'block';
+      zoomOutBtn.style.opacity = currentViewBoxWidth < 1600 ? '1' : '0';
+      zoomOutBtn.style.pointerEvents = currentViewBoxWidth < 1600 ? 'auto' : 'none';
+    }
+    if(zoomInBtn) {
+      zoomInBtn.style.display = 'block';
+      zoomInBtn.style.opacity = currentViewBoxWidth > minViewBoxWidth + 1 ? '1' : '0'; // +1 for floating point precision
+      zoomInBtn.style.pointerEvents = currentViewBoxWidth > minViewBoxWidth + 1 ? 'auto' : 'none';
+    }
+  } else {
+    if(leftBtn) leftBtn.style.display = 'none';
+    if(rightBtn) rightBtn.style.display = 'none';
+    if(zoomOutBtn) zoomOutBtn.style.display = 'none';
+    if(zoomInBtn) zoomInBtn.style.display = 'none';
+  }
+}
 
 function updateViewBox() {
   if (!svgEl) return;
@@ -131,7 +167,14 @@ function updateViewBox() {
 
   if (aspect < defaultAspect) {
     isMobileView = true;
-    currentViewBoxWidth = 900 * aspect;
+    minViewBoxWidth = 900 * aspect;
+    
+    if (currentViewBoxWidth === 1600 && currentViewBoxX === null) {
+      currentViewBoxWidth = minViewBoxWidth;
+    } else {
+      currentViewBoxWidth = Math.max(minViewBoxWidth, Math.min(currentViewBoxWidth, 1600));
+    }
+    
     maxViewBoxX = 1600 - currentViewBoxWidth;
     
     if (currentViewBoxX === null) {
@@ -143,23 +186,17 @@ function updateViewBox() {
     
     gsap.set(svgEl, { attr: { viewBox: `${currentViewBoxX} 0 ${currentViewBoxWidth} 900` } });
     
-    const leftBtn = document.getElementById('mobile-nav-left');
-    const rightBtn = document.getElementById('mobile-nav-right');
-    if(leftBtn) leftBtn.style.display = currentViewBoxX > 0 ? 'block' : 'none';
-    if(rightBtn) rightBtn.style.display = currentViewBoxX < maxViewBoxX ? 'block' : 'none';
+    updateMobileNavButtons();
     
     const hint = document.getElementById('hint');
-    if(hint) hint.textContent = "PAN TO EXPLORE";
+    if(hint) hint.textContent = "PAN & ZOOM TO EXPLORE";
   } else {
     isMobileView = false;
     currentViewBoxWidth = 1600;
     currentViewBoxX = null;
     gsap.set(svgEl, { attr: { viewBox: `0 0 1600 900` } });
     
-    const leftBtn = document.getElementById('mobile-nav-left');
-    const rightBtn = document.getElementById('mobile-nav-right');
-    if(leftBtn) leftBtn.style.display = 'none';
-    if(rightBtn) rightBtn.style.display = 'none';
+    updateMobileNavButtons();
     
     const hint = document.getElementById('hint');
     if(hint) hint.textContent = "EXPLORE THE ROOM WITH YOUR MOUSE";
@@ -185,10 +222,36 @@ window.panView = function(direction) {
   
   currentViewBoxX = newX;
   
-  const leftBtn = document.getElementById('mobile-nav-left');
-  const rightBtn = document.getElementById('mobile-nav-right');
-  if(leftBtn) leftBtn.style.display = currentViewBoxX > 0 ? 'block' : 'none';
-  if(rightBtn) rightBtn.style.display = currentViewBoxX < maxViewBoxX ? 'block' : 'none';
+  updateMobileNavButtons();
+};
+
+window.zoomView = function(direction) {
+  if (!isMobileView) return;
+  
+  // direction: 1 for zoom out, -1 for zoom in
+  const zoomStep = 300; // pixels of width to change
+  let newWidth = currentViewBoxWidth + direction * zoomStep;
+  
+  newWidth = Math.max(minViewBoxWidth, Math.min(newWidth, 1600));
+  
+  // Try to keep the center of the current view in the same spot
+  const currentCenterX = currentViewBoxX + currentViewBoxWidth / 2;
+  let newX = currentCenterX - newWidth / 2;
+  
+  maxViewBoxX = 1600 - newWidth;
+  newX = Math.max(0, Math.min(newX, maxViewBoxX));
+  
+  gsap.to(svgEl, {
+    attr: { viewBox: `${newX} 0 ${newWidth} 900` },
+    duration: 0.5,
+    ease: "power2.out",
+    onUpdate: syncVideoPosition
+  });
+  
+  currentViewBoxWidth = newWidth;
+  currentViewBoxX = newX;
+  
+  updateMobileNavButtons();
 };
 
 window.toggleMenu = function() {
