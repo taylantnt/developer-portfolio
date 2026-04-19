@@ -331,18 +331,99 @@
       opacity: 0;
       transform: translateY(40px);
     }
+
+    /* Mobile Navigation */
+    #hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    
+    #hamburger span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-arrow {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 16px 5%;
+      }
+      
+      #hamburger {
+        display: flex;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70vw;
+        height: 100vh;
+        background-color: var(--bg);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.4s ease;
+        z-index: 999;
+        border-left: 1px solid var(--surface-border);
+      }
+      
+      .nav-links.active {
+        right: 0;
+      }
+      
+      .nav-links a {
+        font-size: 1.2rem;
+        padding: 15px;
+      }
+      
+      /* Hamburger animation */
+      #hamburger.active span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      #hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      #hamburger.active span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+      
+      /* Arrow replacement on mobile */
+      .desktop-arrow {
+        display: none;
+      }
+      .mobile-arrow {
+        display: inline;
+        /* Force text rendering instead of emoji */
+        font-family: 'Inter', sans-serif;
+      }
+    }
   </style>
 </head>
 <body>
 
   <nav>
     <a href="index.html" class="nav-logo">Taylan Topuz</a>
-    <div class="nav-links">
-      <a href="index.html">Interactive Room</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#work">Work</a>
-      <a href="#contact">Contact</a>
+    <div id="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html" onclick="toggleMenu()">Interactive Room</a>
+      <a href="#about" onclick="toggleMenu()">About</a>
+      <a href="#services" onclick="toggleMenu()">Services</a>
+      <a href="#work" onclick="toggleMenu()">Work</a>
+      <a href="#contact" onclick="toggleMenu()">Contact</a>
     </div>
   </nav>
 
@@ -416,7 +497,7 @@
         <span class="mono">RESTAURANT WEBSITE</span>
         <div class="project-header">
           <h3>Saray</h3>
-          <a href="https://sarayy.netlify.app" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+          <a href="https://sarayy.netlify.app" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website <span class="desktop-arrow">↗</span><span class="mobile-arrow">&#x2197;&#xFE0E;</span></a>
         </div>
         <p>A bilingual (JP / EN / TR) website for the largest Turkish restaurant chain in Tokyo. Built with a custom CMS for menu management, multilingual content, and online reservation integration.</p>
         <div class="tag-container">
@@ -434,7 +515,7 @@
         <span class="mono">COMMUNITY PLATFORM</span>
         <div class="project-header">
           <h3>Circle Tokyo</h3>
-          <a href="https://tokyocircle.jp/" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+          <a href="https://tokyocircle.jp/" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website <span class="desktop-arrow">↗</span><span class="mobile-arrow">&#x2197;&#xFE0E;</span></a>
         </div>
         <p>A full community platform for one of Tokyo's largest photowalk meetup groups. Features a custom backend where members upload photos from their own devices securely.</p>
         <div class="tag-container">
@@ -452,7 +533,7 @@
         <span class="mono">PERSONAL PORTFOLIO</span>
         <div class="project-header">
           <h3>Taylan Topuz</h3>
-          <a href="https://www.taylantopuz.com" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+          <a href="https://www.taylantopuz.com" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website <span class="desktop-arrow">↗</span><span class="mobile-arrow">&#x2197;&#xFE0E;</span></a>
         </div>
         <p>My own photography and videography portfolio — designed and built from scratch. Features a full-screen video masthead served via CDN, an EN / JP language toggle, a custom booking flow, and a handcrafted gallery.</p>
         <div class="tag-container">
@@ -470,7 +551,7 @@
         <span class="mono">PHOTOGRAPHY PORTFOLIO</span>
         <div class="project-header">
           <h3>simseksua.com</h3>
-          <a href="https://simseksua.com" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+          <a href="https://simseksua.com" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website <span class="desktop-arrow">↗</span><span class="mobile-arrow">&#x2197;&#xFE0E;</span></a>
         </div>
         <p>A minimalist portfolio for Tokyo-based photographer Simsek Sua Tortu. Full-bleed imagery with a near-invisible UI — the photography speaks for itself. Built for performance with lazy-loading via CDN.</p>
         <div class="tag-container">
@@ -488,7 +569,7 @@
         <span class="mono">ARTIST PORTFOLIO</span>
         <div class="project-header">
           <h3>Ertug Sayin</h3>
-          <a href="https://ertugsayin.netlify.app" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+          <a href="https://ertugsayin.netlify.app" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website <span class="desktop-arrow">↗</span><span class="mobile-arrow">&#x2197;&#xFE0E;</span></a>
         </div>
         <p>Portfolio site for photographer and artist Ertug Sayin. Designed with a bold editorial tone — high-contrast layouts, asymmetric grids, and dramatic typography that mirrors the artist's visual identity.</p>
         <div class="tag-container">
@@ -558,6 +639,28 @@
       y: 100,
       ease: "none"
     });
+
+    // Mobile menu toggle
+    function toggleMenu() {
+      const nav = document.querySelector('nav');
+      const navLinks = document.getElementById('nav-links');
+      const hamburger = document.getElementById('hamburger');
+      
+      if (window.innerWidth <= 900) {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+        
+        if (navLinks.classList.contains('active')) {
+          nav.style.mixBlendMode = 'normal';
+        } else {
+          setTimeout(() => {
+            if (!navLinks.classList.contains('active')) {
+              nav.style.mixBlendMode = 'difference';
+            }
+          }, 400);
+        }
+      }
+    }
   </script>
 </body>
 </html>
