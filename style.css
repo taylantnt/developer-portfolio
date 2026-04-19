@@ -1,0 +1,335 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #443a37;
+  --wall: #2A1F1A;
+  --amber: #E8A870;
+  --amber-dark: #C4956A;
+  --cream: #F0DFC0;
+  --wood: #4A3222;
+  --wood-dark: #2C1B10;
+  --highlight: #F5C090;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+  font-family: 'DM Mono', monospace;
+  cursor: none; /* Custom cursor */
+}
+
+/* ── Custom cursor ── */
+#cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: var(--amber);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+  box-shadow: 0 0 10px var(--amber);
+}
+
+#cursor.hovering {
+  width: 32px;
+  height: 32px;
+  opacity: 0.6;
+  background: transparent;
+  border: 2px solid var(--amber);
+  box-shadow: none;
+}
+
+#scene {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.project-item {
+  cursor: pointer;
+}
+
+/* ── Steam Animation ── */
+.steam {
+  opacity: 0;
+  animation: steam-rise 4s infinite ease-out;
+}
+
+.steam:nth-child(2) {
+  animation-delay: 1.3s;
+}
+
+.steam:nth-child(3) {
+  animation-delay: 2.6s;
+}
+
+@keyframes steam-rise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0; }
+  30% { opacity: 0.6; }
+  70% { opacity: 0.6; }
+  100% { transform: translateY(-40px) scaleX(1.5); opacity: 0; }
+}
+
+/* ── Overlay ── */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 10, 8, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  transition: opacity 0.4s ease;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#project-panel, #about-panel, #contact-panel, #work-panel {
+  background: linear-gradient(145deg, #24160E, #1A0F09);
+  border: 1px solid rgba(196, 149, 106, 0.2);
+  border-radius: 24px;
+  /* Padding moved to inner content so the scrollbar is cleanly clipped by the outer rounded corners */
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  color: var(--cream);
+  position: relative;
+  transform: translateY(30px) scale(0.95);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 60px rgba(232, 168, 112, 0.05);
+}
+
+#project-panel.active, #about-panel.active, #contact-panel.active, #work-panel.active {
+  display: flex;
+}
+
+#overlay.active #project-panel.active,
+#overlay.active #about-panel.active,
+#overlay.active #contact-panel.active,
+#overlay.active #work-panel.active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: var(--amber-dark);
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  color: var(--amber);
+  background: rgba(196, 149, 106, 0.1);
+}
+
+.typing-phase {
+  display: flex;
+  gap: 10px;
+  padding: 80px 50px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+#project-content, #about-content, #contact-content, #work-content {
+  display: none;
+  padding: 40px 50px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(196, 149, 106, 0.6) transparent; /* Firefox */
+  flex: 1;
+}
+
+/* Custom Scrollbar for Webkit (Chrome, Safari, Edge) */
+#project-content::-webkit-scrollbar,
+#about-content::-webkit-scrollbar,
+#contact-content::-webkit-scrollbar,
+#work-content::-webkit-scrollbar {
+  width: 8px; /* Slightly thicker so it doesn't hide */
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+#project-content::-webkit-scrollbar-track,
+#about-content::-webkit-scrollbar-track,
+#contact-content::-webkit-scrollbar-track,
+#work-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  margin: 16px 0; /* Keep it away from the extreme top/bottom edges */
+}
+
+#project-content::-webkit-scrollbar-thumb,
+#about-content::-webkit-scrollbar-thumb,
+#contact-content::-webkit-scrollbar-thumb,
+#work-content::-webkit-scrollbar-thumb {
+  background: rgba(196, 149, 106, 0.6);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.1); /* Subtle definition */
+}
+
+#project-content::-webkit-scrollbar-thumb:hover,
+#about-content::-webkit-scrollbar-thumb:hover,
+#contact-content::-webkit-scrollbar-thumb:hover,
+#work-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(196, 149, 106, 1);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background: var(--amber);
+  border-radius: 50%;
+  animation: dot-bounce 1.4s infinite;
+  opacity: 0.6;
+}
+
+.dot:nth-child(2) { animation-delay: 0.15s; }
+.dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dot-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+  30% { transform: translateY(-12px); opacity: 1; box-shadow: 0 0 10px var(--amber); }
+}
+
+.proj-tag {
+  display: inline-block;
+  background: rgba(196, 149, 106, 0.1);
+  color: var(--amber);
+  border: 1px solid rgba(196, 149, 106, 0.25);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.proj-visit-btn {
+  display: inline-block;
+  margin-top: 35px;
+  padding: 14px 32px;
+  background: var(--amber);
+  color: #120A05;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.proj-visit-btn:hover {
+  background: var(--highlight);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(232, 168, 112, 0.2);
+}
+
+/* ── Intro hint ── */
+#hint {
+  position: fixed;
+  bottom: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(68, 39, 12, 0.7);
+  font-size: 25px;
+  letter-spacing: 4px;
+  pointer-events: none;
+  z-index: 1000; /* Ensure it stays above everything */
+  animation: hint-fade 10s ease-in-out forwards;
+}
+
+@keyframes hint-fade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ══ NAVIGATION BAR ══ */
+#main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 24px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 100;
+  pointer-events: none; /* So the empty space doesn't block the SVG */
+}
+
+#main-nav .nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #E8A870;
+  pointer-events: auto; /* Make clickable */
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+#main-nav .nav-links {
+  display: flex;
+  gap: 40px;
+  pointer-events: auto; /* Make clickable */
+}
+
+#main-nav .nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  color: #C4956A;
+  text-decoration: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+#main-nav .nav-links a:hover {
+  color: #F5C090;
+}
+
+#main-nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 1px;
+  bottom: -4px;
+  left: 0;
+  background-color: #F5C090;
+  transition: width 0.3s ease;
+}
+
+#main-nav .nav-links a:hover::after {
+  width: 100%;
+}

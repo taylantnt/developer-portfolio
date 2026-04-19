@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corporate Profile — Taylan Topuz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --text: #f0f0f0;
+      --accent: #E8A870;
+      --muted: #888888;
+      --surface: #141414;
+      --surface-border: #222222;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+    }
+
+    .mono {
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 24px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 10%;
+      position: relative;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background: radial-gradient(circle at 80% 20%, rgba(232, 168, 112, 0.1) 0%, transparent 40%);
+      z-index: -1;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      max-width: 1000px;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+
+    /* Sections */
+    section {
+      padding: 120px 10%;
+    }
+
+    .section-header {
+      margin-bottom: 80px;
+    }
+
+    .section-header h2 {
+      font-size: 3rem;
+      margin-top: 16px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    /* Services */
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      padding: 40px;
+      border-radius: 16px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(232, 168, 112, 0.3);
+    }
+
+    .service-card h3 {
+      font-size: 1.75rem;
+      margin-bottom: 16px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    /* Portfolio */
+    .project-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-bottom: 120px;
+    }
+
+    .project-row:nth-child(even) {
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .project-row:nth-child(even) .project-content {
+      order: -1;
+    }
+
+    @media (max-width: 1000px) {
+      .project-row, .project-row:nth-child(even) {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .project-row:nth-child(even) .project-content {
+        order: 1;
+      }
+    }
+
+    .project-image-container {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      background: var(--surface);
+      aspect-ratio: 16/9;
+    }
+
+    .project-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transform: scale(1.1);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .project-row:hover .project-image {
+      transform: scale(1.05);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      margin-top: 16px;
+    }
+
+    .project-content h3 {
+      font-size: 2.5rem;
+      margin: 0;
+    }
+
+    .project-content p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .tag {
+      padding: 6px 16px;
+      border: 1px solid var(--surface-border);
+      border-radius: 40px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      background: var(--text);
+      color: var(--bg);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--surface-border);
+    }
+
+    .btn-outline:hover {
+      background: var(--surface);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Footer */
+    footer {
+      padding: 120px 10% 40px;
+      border-top: 1px solid var(--surface-border);
+      text-align: center;
+    }
+
+    footer h2 {
+      font-size: 4rem;
+      margin-bottom: 24px;
+    }
+
+    footer p {
+      color: var(--muted);
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 80px;
+      margin-bottom: 40px;
+    }
+
+    .social-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+    }
+
+    .copyright {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Animation Classes */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Taylan Topuz</a>
+    <div class="nav-links">
+      <a href="index.html">Interactive Room</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg" data-speed="0.5"></div>
+    <div class="fade-up">
+      <span class="mono">Creative Developer & UI/UX Engineer</span>
+      <h1>Crafting Digital <br>Experiences.</h1>
+      <p>I build custom, high-performance web applications, interactive portfolios, and robust platforms for ambitious brands.</p>
+      <div style="display: flex; gap: 16px;">
+        <a href="#work" class="btn">View Work</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="grid-2">
+      <div class="fade-up">
+        <h2 style="font-size: 3rem; margin-bottom: 24px;">Approach</h2>
+        <p style="font-size: 1.2rem; color: var(--muted); margin-bottom: 24px;">
+          Every great digital experience begins with a conversation. I believe that the best results are born from true collaboration, clear communication, and a shared vision.
+        </p>
+        <p style="font-size: 1.1rem; color: var(--muted);">
+          With a strong background in photography and videography, I approach development not just as writing code, but as crafting engaging, visual stories. Whether it's a bespoke portfolio, a complex web application, or an immersive interactive experience, I pay meticulous attention to every micro-interaction and line of code.
+        </p>
+      </div>
+      <div class="fade-up" style="border-radius: 16px; overflow: hidden; height: 100%; min-height: 400px;">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop" alt="Coding" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2);">
+      </div>
+    </div>
+  </section>
+
+  <section id="services" style="background: var(--surface);">
+    <div class="section-header fade-up">
+      <span class="mono">Expertise</span>
+      <h2>Services & Solutions</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up">
+        <h3>Custom Web Development</h3>
+        <p style="color: var(--muted);">High-performance, scalable web applications built with modern frameworks like React, Next.js, and Node.js.</p>
+      </div>
+      <div class="service-card fade-up" style="transition-delay: 0.1s;">
+        <h3>UI/UX Engineering</h3>
+        <p style="color: var(--muted);">Translating brand identities into pixel-perfect, accessible, and highly intuitive user interfaces.</p>
+      </div>
+      <div class="service-card fade-up" style="transition-delay: 0.2s;">
+        <h3>Interactive Portfolios</h3>
+        <p style="color: var(--muted);">Immersive, award-winning digital experiences utilizing GSAP, WebGL, and advanced CSS animations.</p>
+      </div>
+      <div class="service-card fade-up" style="transition-delay: 0.3s;">
+        <h3>CMS & E-Commerce</h3>
+        <p style="color: var(--muted);">Robust content management systems and custom storefronts designed for conversion and ease of use.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="section-header fade-up">
+      <span class="mono">Selected Work</span>
+      <h2>Featured Projects</h2>
+    </div>
+
+    <!-- Project 1 -->
+    <div class="project-row fade-up">
+      <div class="project-image-container parallax-img">
+        <img class="project-image" src="https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538160/saray-dev.png" alt="Saray">
+      </div>
+      <div class="project-content">
+        <span class="mono">RESTAURANT WEBSITE</span>
+        <div class="project-header">
+          <h3>Saray</h3>
+          <a href="https://sarayy.netlify.app" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+        </div>
+        <p>A bilingual (JP / EN / TR) website for the largest Turkish restaurant chain in Tokyo. Built with a custom CMS for menu management, multilingual content, and online reservation integration.</p>
+        <div class="tag-container">
+          <span class="tag">CMS</span><span class="tag">Multilingual</span><span class="tag">Reservations</span><span class="tag">UI/UX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="project-row fade-up">
+      <div class="project-image-container parallax-img">
+        <img class="project-image" src="https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/circle-dev.png" alt="Circle Tokyo">
+      </div>
+      <div class="project-content">
+        <span class="mono">COMMUNITY PLATFORM</span>
+        <div class="project-header">
+          <h3>Circle Tokyo</h3>
+          <a href="https://tokyocircle.jp/" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+        </div>
+        <p>A full community platform for one of Tokyo's largest photowalk meetup groups. Features a custom backend where members upload photos from their own devices securely.</p>
+        <div class="tag-container">
+          <span class="tag">Backend</span><span class="tag">Admin Dashboard</span><span class="tag">Cloud Storage</span><span class="tag">Community</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project-row fade-up">
+      <div class="project-image-container parallax-img">
+        <img class="project-image" src="https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/taylantopuz-dev.png" alt="Taylan Topuz">
+      </div>
+      <div class="project-content">
+        <span class="mono">PERSONAL PORTFOLIO</span>
+        <div class="project-header">
+          <h3>Taylan Topuz</h3>
+          <a href="https://www.taylantopuz.com" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+        </div>
+        <p>My own photography and videography portfolio — designed and built from scratch. Features a full-screen video masthead served via CDN, an EN / JP language toggle, a custom booking flow, and a handcrafted gallery.</p>
+        <div class="tag-container">
+          <span class="tag">Custom Build</span><span class="tag">Bilingual</span><span class="tag">Video CDN</span><span class="tag">Booking Flow</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="project-row fade-up">
+      <div class="project-image-container parallax-img">
+        <img class="project-image" src="https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/simseksua-dev.png" alt="Simsek Sua">
+      </div>
+      <div class="project-content">
+        <span class="mono">PHOTOGRAPHY PORTFOLIO</span>
+        <div class="project-header">
+          <h3>simseksua.com</h3>
+          <a href="https://simseksua.com" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+        </div>
+        <p>A minimalist portfolio for Tokyo-based photographer Simsek Sua Tortu. Full-bleed imagery with a near-invisible UI — the photography speaks for itself. Built for performance with lazy-loading via CDN.</p>
+        <div class="tag-container">
+          <span class="tag">Photography</span><span class="tag">Minimalist</span><span class="tag">Performance</span><span class="tag">Gallery</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 5 -->
+    <div class="project-row fade-up">
+      <div class="project-image-container parallax-img">
+        <img class="project-image" src="https://res.cloudinary.com/drnh8zy84/image/upload/q_auto/f_auto/v1776538245/ertugsayin-dev.png" alt="Ertug Sayin">
+      </div>
+      <div class="project-content">
+        <span class="mono">ARTIST PORTFOLIO</span>
+        <div class="project-header">
+          <h3>Ertug Sayin</h3>
+          <a href="https://ertugsayin.netlify.app" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Visit Website ↗</a>
+        </div>
+        <p>Portfolio site for photographer and artist Ertug Sayin. Designed with a bold editorial tone — high-contrast layouts, asymmetric grids, and dramatic typography that mirrors the artist's visual identity.</p>
+        <div class="tag-container">
+          <span class="tag">Fine Art</span><span class="tag">Editorial</span><span class="tag">Booking</span><span class="tag">Photography</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="fade-up">
+      <span class="mono">Let's Work Together</span>
+      <h2>Start a Project</h2>
+      <p>I'm currently accepting new freelance clients. If you need a stunning web presence, a custom web app, or an interactive portfolio to show off your work, I'd love to help you build it.</p>
+      <a href="mailto:ttopuz@outlook.jp" class="btn">Inquiry</a>
+      
+      <div class="social-links">
+        <a href="https://www.linkedin.com/in/taylan-topuz/" target="_blank">LinkedIn</a>
+        <a href="https://www.instagram.com/tay.camera/" target="_blank">Instagram</a>
+        <a href="#" target="_blank">X</a>
+      </div>
+      <p class="copyright">© 2026 Taylan Topuz. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initialize fade-up animations
+    gsap.utils.toArray('.fade-up').forEach(element => {
+      gsap.to(element, {
+        scrollTrigger: {
+          trigger: element,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        },
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      });
+    });
+
+    // Parallax effect for images
+    gsap.utils.toArray('.parallax-img').forEach(container => {
+      const img = container.querySelector('img');
+      gsap.to(img, {
+        scrollTrigger: {
+          trigger: container,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        },
+        y: 50,
+        ease: "none"
+      });
+    });
+
+    // Hero background parallax
+    gsap.to('.hero-bg', {
+      scrollTrigger: {
+        trigger: '.hero',
+        start: "top top",
+        end: "bottom top",
+        scrub: true
+      },
+      y: 100,
+      ease: "none"
+    });
+  </script>
+</body>
+</html>
